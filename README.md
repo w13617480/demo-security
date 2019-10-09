@@ -27,10 +27,10 @@
 
 **项目结构** 
 ```
-renren-security
-├─renren-common     公共模块
+demo-security
+├─demo-common     公共模块
 │ 
-├─renren-admin      管理后台
+├─demo-admin      管理后台
 │    ├─db  数据库SQL脚本
 │    │ 
 │    ├─modules  模块
@@ -48,9 +48,9 @@ renren-security
 │        └─application.yml   全局配置文件
 │       
 │ 
-├─renren-api        API服务
+├─demo-api        API服务
 │ 
-├─renren-generator  代码生成器
+├─demo-generator  代码生成器
 │        └─resources 
 │           ├─mapper   MyBatis文件
 │           ├─template 代码生成器模板（可增加或修改相应模板）
@@ -82,31 +82,31 @@ renren-security
 
  **本地部署**
 - 通过git下载源码
-- 创建数据库renren_security，数据库编码为UTF-8
+- 创建数据库demo_security，数据库编码为UTF-8
 - 执行db/mysql.sql文件，初始化数据【按需导入表结构及数据】
 - 修改application-dev.yml文件，更新MySQL账号和密码
-- 在renren-security目录下，执行mvn clean install
+- 在demo-security目录下，执行mvn clean install
 <br>
 
-- Eclipse、IDEA运行AdminApplication.java，则可启动项目【renren-admin】
-- renren-admin访问路径：http://localhost:8080/renren-admin
-- swagger文档路径：http://localhost:8080/renren-admin/swagger/index.html
+- Eclipse、IDEA运行AdminApplication.java，则可启动项目【demo-admin】
+- demo-admin访问路径：http://localhost:8080/demo-admin
+- swagger文档路径：http://localhost:8080/demo-admin/swagger/index.html
 - 账号密码：admin/admin
 
 <br>
 
-- Eclipse、IDEA运行ApiApplication.java，则可启动项目【renren-api】
-- renren-api访问路径：http://localhost:8081/renren-api/swagger-ui.html
+- Eclipse、IDEA运行ApiApplication.java，则可启动项目【demo-api】
+- demo-api访问路径：http://localhost:8081/demo-api/swagger-ui.html
 
 <br>
 
-- Eclipse、IDEA运行GeneratorApplication.java，则可启动项目【renren-generator】
-- renren-generator访问路径：http://localhost:8082/renren-generator
+- Eclipse、IDEA运行GeneratorApplication.java，则可启动项目【demo-generator】
+- demo-generator访问路径：http://localhost:8082/demo-generator
 
 
 <br>
 
  **分布式部署**
 - 分布式部署，需要安装redis，并配置config.properties里的redis信息
-- 需要配置【renren.redis.open=true】，表示开启redis缓存
-- 需要配置【renren.shiro.redis=true】，表示把shiro session存到redis里
+- 需要配置【demo.redis.open=true】，表示开启redis缓存
+- 需要配置【demo.shiro.redis=true】，表示把shiro session存到redis里
