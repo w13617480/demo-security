@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.sys.dao.DaNewsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.sys.entity.DaNewsEntity" id="daNewsMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="optime" column="optime"/>
+        <result property="opdate" column="opdate"/>
+        <result property="operator" column="operator"/>
+        <result property="likes" column="likes"/>
+        <result property="content" column="content"/>
+        <result property="channel1" column="channel1"/>
+        <result property="channel2" column="channel2"/>
+        <result property="banner" column="banner"/>
+        <result property="author" column="author"/>
+    </resultMap>
+
+
+	<select id="queryDaNewsBySql" parameterType="map" resultMap="daNewsMap">
+           
+        SELECT t.*, date_format(t.optime, '%Y-%m-%d') opdate
+          FROM da_news t 
+         where 1=1
+         <if test="channel1 != ''">
+        	AND t.channel1 = #{channel1}
+         </if> 
+         <if test="channel2 != ''">
+        	AND t.channel2 = #{channel2}
+         </if> 
+         order by ${sidx} ${order} limit ${currIndex} , ${pageSize}
+	</select>
+	
+	<select id="getDaNewsCount" parameterType="map" resultType="int">
+        SELECT COUNT(1) 
+          FROM da_news t 
+         where 1=1
+         <if test="channel1 != ''">
+        	AND t.channel1 = #{channel1}
+         </if> 
+         <if test="channel2 != ''">
+        	AND t.channel2 = #{channel2}
+         </if> 
+    </select>
+
+</mapper>

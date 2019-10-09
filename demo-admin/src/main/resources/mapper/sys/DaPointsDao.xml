@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.sys.dao.DaPointsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.sys.entity.DaPointsEntity" id="daPointsMap">
+        <result property="id" column="id"/>
+        <result property="userid" column="userid"/>
+        <result property="occtime" column="occtime"/>
+        <result property="type" column="type"/>
+        <result property="points" column="points"/>
+        <result property="memo" column="memo"/>
+
+        <result property="name" column="name"/>
+        <result property="dept_name" column="dept_name"/>
+    </resultMap>
+
+	
+    
+    <select id="queryStudentsBySql" parameterType="map" resultMap="daPointsMap">
+           
+        SELECT t.*, a.name, b.name dept_name 
+          FROM da_points t LEFT JOIN da_user a ON t.userid = a.id
+                           LEFT JOIN sys_dept b ON a.dept_id = b.dept_id
+         where 1=1
+         <if test="name != ''">
+        	AND a.name like CONCAT('%',#{name},'%')
+         </if> 
+         <if test="start != ''">
+	        AND DATE_FORMAT(t.occtime,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{start},'%Y-%m-%d')
+         </if> 
+         <if test="ends != ''">
+         	AND DATE_FORMAT(t.occtime,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{ends},'%Y-%m-%d') 
+         </if> 
+         
+         
+         order by ${sidx} ${order} limit ${currIndex} , ${pageSize}
+	</select>
+	
+	<select id="getCount" resultType="int">
+        SELECT COUNT(1) FROM da_points
+    </select>
+
+
+</mapper>

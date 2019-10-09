@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>检查站自救器发放台账</title>
+		<#include "/header.html">
+</head>
+
+<body onload="read()">
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+		
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+    
+        <div class="panel-heading"> <label> {{title}} </label> </div>
+        
+        
+        <div  style="padding:20px 20px 0 20px">
+        	<div class="form-group col-sm-2"  style="width:270px; padding-left:0px">
+        		 
+        		<select  class="form-control" id="bc" style="width:120px; display: inline" >
+                	<option value="-1">班次</option>
+                </select>
+				
+				<input type="text"  id="ends" class="form-control"  style="width:120px; display: inline" placeholder='日期' onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" >
+				              
+			</div>
+		 
+			 
+			<a class="btn btn-default" @click="tjquery"><i class="fa fa-search"></i>&nbsp;查询</a>
+	        <a class="btn btn-default" @click="impquery"><i class="fa fa-download"></i>&nbsp;导出</a>
+        </div>
+        
+        
+  
+          
+               <div id="page-content" style="text-align: center; padding:20px">
+               		 
+					<div class="ui-jqgrid " id="gbox_jqGrid" dir="ltr"
+						style="width: 1089px;">
+						<div class="ui-jqgrid-view table-responsive" role="grid"
+							id="gview_jqGrid" style="width: 1089px;">
+							<div class="ui-jqgrid-titlebar ui-jqgrid-caption"
+								style="display: none;">
+								<a role="link" class="ui-jqgrid-titlebar-close HeaderButton "
+									title="Toggle Expand Collapse Grid" style="right: 0px;"><span
+									class="ui-jqgrid-headlink glyphicon glyphicon-circle-arrow-up"></span></a><span
+									class="ui-jqgrid-title"></span>
+							</div>
+							<div class="ui-jqgrid-hdiv" style="width: 1087px;"  style="text-align: center;">
+								<div class="ui-jqgrid-hbox">
+									<table
+										class="ui-jqgrid-htable ui-common-table table table-bordered"
+										style="width: 1089px;" role="presentation"
+										aria-labelledby="gbox_jqGrid" id="talves" id="leader_name" style="text-align: center;" id="ganburenmianbaio">
+										<thead>
+											<tr class="ui-jqgrid-labels" role="row">
+												<th id="jqGrid_rn" role="columnheader"
+													class="ui-th-column ui-th-ltr " style="width: 50px;">
+													<span
+													class="ui-jqgrid-resize ui-jqgrid-resize-ltr"
+													style="cursor: col-resize;">&nbsp;</span>
+													<div class="ui-th-div ui-jqgrid-sortable"
+														id="jqgh_jqGrid_name" style="text-align: center;">
+														序号<span class="s-ico" style="display: none"><span
+															sort="asc"
+															class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span
+															sort="desc"
+															class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span>
+													</div>
+												</th>
+												
+												<th id="jqGrid_name" role="columnheader"
+													class="ui-th-column ui-th-ltr " 
+													><span
+													class="ui-jqgrid-resize ui-jqgrid-resize-ltr"
+													style="cursor: col-resize;">&nbsp;</span>
+													<div class="ui-th-div ui-jqgrid-sortable"
+														id="jqgh_jqGrid_name" style="text-align: center;">
+														单  位<span class="s-ico" style="display: none"><span
+															sort="asc"
+															class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span
+															sort="desc"
+															class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span>
+													</div>
+												</th>
+												<th id="jqGrid_address" role="columnheader"
+													class="ui-th-column ui-th-ltr " ><span
+													class="ui-jqgrid-resize ui-jqgrid-resize-ltr"
+													style="cursor: col-resize;">&nbsp;</span>
+													<div class="ui-th-div ui-jqgrid-sortable"
+														id="jqgh_jqGrid_address" style="text-align: center;">
+														领取数<span class="s-ico" style="display: none"><span
+															sort="asc"
+															class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span
+															sort="desc"
+															class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span>
+													</div>
+												</th>
+												<th id="jqGrid_address" role="columnheader"
+													class="ui-th-column ui-th-ltr " ><span
+													class="ui-jqgrid-resize ui-jqgrid-resize-ltr"
+													style="cursor: col-resize;">&nbsp;</span>
+													<div class="ui-th-div ui-jqgrid-sortable"
+														id="jqgh_jqGrid_address" style="text-align: center;">
+														领取人<span class="s-ico" style="display: none"><span
+															sort="asc"
+															class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span
+															sort="desc"
+															class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span>
+													</div>
+												</th>	
+											</tr>
+										</thead>
+										<tbody id="tbodys" align="center">
+											
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+							
+								
+						</div>
+							
+					</div>
+				</div>
+   
+        
+       
+    </div>
+    
+
+</div>
+<!--  -->
+<script src="${request.contextPath}/statics/js/FileSaver.js"></script>
+<script src="${request.contextPath}/statics/js/jquery.wordexport.js"></script>
+<script src="${request.contextPath}/statics/js/comm.js"></script>
+<script src="${request.contextPath}/statics/js/modules/sys/aqjczzjqtj.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/plugins/My97DatePicker/WdatePicker.js"></script>
+<input type="hidden" id="cont" value="0">
+</body>
+</html>

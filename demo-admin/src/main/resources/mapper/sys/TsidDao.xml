@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.sys.dao.TsidDao">
+   	<!-- 可根据自己的需求，是否要使用 -->
+  
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.sys.entity.TsidEntity" id="tsidMap">
+        <result property="id" column="id"/>
+        <result property="idname" column="idname"/>
+        <result property="ids" column="ids"/>
+    </resultMap>
+   <insert id="insterTsid" parameterType="io.renren.modules.sys.entity.TsidEntity" useGeneratedKeys="true" keyProperty="id">
+		 INSERT INTO t_sid (ids) VALUE ('')
+		<!-- <selectKey resultType="java.lang.Integer" order="AFTER"  keyProperty="id" >
+		      SELECT LAST_INSERT_ID() as id
+		</selectKey>  -->
+		
+	</insert>
+	<delete id="deletctTsid" parameterType="int">
+		  DELETE FROM t_sid WHERE id= #{parentId}
+	</delete>
+</mapper>

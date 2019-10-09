@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.sys.dao.SysUserDao">
+	
+	
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.sys.entity.SysUserEntity" id="sysUserMap">       
+        <result property="userId" column="userId"/>
+		<result property="username" column="username"/>
+		<result property="password" column="password"/>
+		<result property="operatorname" column="operatorname"/>
+		<result property="salt" column="salt"/>
+		<result property="email" column="email"/>
+		<result property="mobile" column="mobile"/>
+		<result property="status" column="status"/>
+		<result property="createTime" column="createTime"/>
+		<result property="deptId" column="deptId"/>
+		<result property="deptName" column="deptName"/>		 
+    </resultMap>
+	
+	<!-- 查询用户的所有权限 -->
+	<select id="queryAllPerms" resultType="string">
+		select m.perms from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	<!-- 查询用户的所有菜单ID --> 
+	<select id="queryAllMenuId" resultType="long">
+		select distinct rm.menu_id from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	
+	<select id="getValid" resultType="string">
+		SELECT CASE WHEN  DATE_FORMAT(NOW(), '%Y-%m-%d') <![CDATA[>]]> DATE_FORMAT(t.value, '%Y-%m-%d') THEN 0 ELSE 1 END AS valid 
+		  FROM sys_dict t  
+		 WHERE TYPE = 'invaliddate'
+	</select>
+	
+	<select id="getDaUserEntityByPassword" resultMap="sysUserMap" >
+       SELECT CASE WHEN worknumber = NULL || worknumber = '' THEN idnumber ELSE worknumber END AS username,
+              t.password, '1' AS STATUS 
+         FROM da_user t
+        where worknumber=#{username} or idnumber = #{username}
+    </select>
+
+</mapper>

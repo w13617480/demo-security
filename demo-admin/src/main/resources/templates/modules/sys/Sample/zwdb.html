@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>指纹比对</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="css/box.css" type="text/css">
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/fingerprint.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/baseMoth.js"></script>
+<script type="text/javascript" src="js/dhtmlxCommon.js"></script>
+</head>
+
+<body onload="myfunction()">
+	<form method="post" id="fpVerifyForm" name="fpVerifyForm"
+		action="authLoginAction!login.do?fpLogin=fpLogin"
+		enctype="multipart/form-data" style="display: none">
+		<input type="hidden" id="verifyModel" name="verifyModel" /> <input
+			type="hidden" id="verifyTemplate" name="verifyTemplate" />
+		
+	</form>
+
+	<div id="fpRegisterDiv" style="display: none; height: do">
+		<a id="fpRegister"
+			onclick='submitRegister("指纹", "指纹数:", "确认保存当前修改吗？", "驱动下载", false)'
+			title="请安装指纹驱动或启动该服务" class="showGray"
+			onmouseover="this.className='showGray'">注册</a>
+	</div>
+	<div id="driverDownload" style="display: inline; margin: 0 0 0 5px;">
+		<a id='downloadDriver' href='middleware/zkbioonline.exe'
+			title='驱动下载'>驱动下载</a>
+	</div>
+	<div id="comparison" style="display: inline"
+		onclick='fpVerification("指纹比对","请安装指纹驱动或启动服务",true,globalContext)'>比对</div>
+	<div>
+		<input type="button" onclick="doVerify()" value="测试1:1接口"/>
+	</div>
+	<div id="comparisonDiv" class="box" style="display: none">
+		<h2>指纹比对</h2>
+		<div class="list">
+			<canvas id="canvasComp" width="430" height="320"
+				style="background: url('image/base_fpVerify.jpg') rgb(243, 245, 240);"></canvas>
+			<input type="button" value="关闭" onclick='closeCompa()' />
+		</div>
+	</div>
+
+	<div id="bg" style="display: none;"></div>
+	<div id="box" class="box" style="display: none;">
+		<h2>指纹登记</h2>
+		<div class="list">
+			<canvas id="canvas" width="430" height="450"
+				style="background: rgb(243, 245, 240)"></canvas>
+			<input type="hidden" id="whetherModify" name="whetherModify" alt=""
+				value="111" />
+
+			<div
+				style="position: absolute; left: 310px; top: 325px; width: 70px; height: 28px;">
+				<button type="button" id="submitButtonId" name="makeSureName"
+					onclick="submitEvent()" class="button-form">确定</button>
+				<!-- ${common_edit_ok}:确定 -->
+			</div>
+			<div
+				style="position: absolute; left: 310px; top: 365px; width: 70px; height: 28px;">
+				<button class="button-form" type="button" id="closeButton"
+					name="closeButton" onclick='cancelEvent("确认保存当前修改吗?", "指纹数:");'>
+					取消</button>
+				<!-- ${common_edit_cancel}:取消 -->
+			</div>
+		</div>
+	</div>
+</body>
+</html>

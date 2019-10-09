@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>人员档案</title>
+		<#include "/header.html">
+		
+</head>
+<body onload="read()">
+<div id="rrapp" v-cloak>
+
+    <div v-show="showList">
+        <div class="grid-btn">
+        
+        	<div class="form-group col-sm-2" style="width:540px"> 
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="请输入姓名或工号"  style="width:150px; display:inline">
+			
+				
+                             
+                <input type="text" class="form-control" style="cursor:pointer;width:140px; display:inline; background-color:white" id="qDeptName" v-model="q.deptid" @click="deptTree('1')" readonly="readonly" placeholder="所属部门"/>
+                
+                
+	
+				<select  class="form-control" id="status" v-model="q.status" style="width:100px; display:inline" autocomplete="off">
+                	<option value="-1">状态</option>
+                </select> 
+			</div>
+	
+			<a class="btn btn-default" id="b1" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+        
+			<#if shiro.hasPermission("sys:dauser:save")>
+            	<a class="btn btn-primary" id="b2" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sys:dauser:update")>
+            	<a class="btn btn-primary" id="b3" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("sys:dauser:delete")>
+            	<a class="btn btn-primary" id="b4" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+			
+			<a class="btn btn-primary"  @click="creHT"><i class="fa fa-trash-o"></i>&nbsp;生成合同</a>
+			<a class="btn btn-primary"  @click="downHT"><i class="fa fa-trash-o"></i>&nbsp;下载合同</a>
+			
+			<!-- 
+			 
+            <a class="btn btn-info" id="b5" @click="impquery"><i class="fa fa-download"></i>&nbsp;下载模板</a>
+            <a class="btn btn-info"  id="import" ><i class="fa fa-upload"></i>&nbsp;导入</a>
+			-->
+			  
+			<form  id="fileForm" name="fileForm" method="post"  enctype="multipart/form-data" >
+					 <input type="file" id="files" style="display:none" onchange="imortsa()"/>
+                   
+					 
+			</form>
+        </div> 
+
+        <table id="jqGrid">
+        </table>
+        <div id="jqGridPager"></div>
+    </div>
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+	        <div class="form-group">
+				<div class="col-sm-2 control-label">所属部门</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" style="cursor:pointer;" id="deptName" v-model="daUser.deptName" @click="deptTree('2')" readonly="readonly" placeholder="所属部门"/>
+					<input type="hidden" id="deptId" v-model="daUser.deptId">
+				</div>
+			</div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label">姓名</div>
+                <div class="col-sm-10">
+                    <input type="text" id="name" class="form-control" v-model="daUser.name" placeholder="姓名"/>
+                </div>
+            </div>
+			<div class="form-group">
+                 <div class="col-sm-2 control-label">性别</div>
+                 <div class="col-sm-10">
+                     <select  class="form-control" id="sex" v-model="daUser.sex">
+                        <option>请选择</option>
+                      </select>
+                 </div>
+            </div>
+            
+            <div class="form-group">
+                 <div class="col-sm-2 control-label">民警/辅警</div>
+                 <div class="col-sm-10">
+                     <select  class="form-control" id="policetype" v-model="daUser.policetype">
+                        <option value="-1">请选择</option>
+                        <option value="0">民警</option>
+                        <option value="1">辅警</option>
+                      </select>
+                 </div>
+            </div>
+
+			<div class="form-group">
+                 <div class="col-sm-2 control-label">警号</div>
+                 <div class="col-sm-10">
+                     <input type="text" class="form-control" id="worknumber" v-model="daUser.worknumber" maxlength="5" placeholder="警号"/>
+                 </div>
+            </div>
+             
+            <div class="form-group">
+                 <div class="col-sm-2 control-label">身份证号</div>
+                 <div class="col-sm-10">
+                     <input type="text" class="form-control" id="idnumber"  v-model="daUser.idnumber" maxlength="18" placeholder="身份证号"/>
+                 </div>
+            </div>
+            
+            
+			
+			<div class="form-group">
+                <div class="col-sm-2 control-label">联系方式</div>
+                <div class="col-sm-10">
+                    <input type="text" id="mobile" class="form-control" v-model="daUser.mobile" placeholder="联系方式"/>
+                </div>
+            </div>
+			
+			
+            
+            <div class="form-group">
+                   <div class="col-sm-2 control-label">出生日期</div>
+                   <div class="col-sm-10">
+                        <input type="text" v-model="daUser.birthday"  id="birthday" class="form-control"
+			             onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="出生日期">
+                   </div>
+            </div>
+			 
+            <div class="form-group">
+                <div class="col-sm-2 control-label">是否在职</div>
+                <div class="col-sm-10">
+                    <select  class="form-control" id="zaizhi" v-model="daUser.status">
+                       <option value="-1">请选择</option>
+                     </select>
+                </div>
+            </div>
+				 
+			<div class="form-group">
+	              <div class="col-sm-2 control-label"></div>
+	              <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+	              &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<input id="start" type="hidden">
+<!-- 选择部门 -->
+<style>
+.aaa{display:none;width:300px;height:300px;text-align:center;position:fixed;left:40%;top:80px;}
+.aaa p{text-align:center;left:40%;top:80px;}
+.bbb{display:none;}
+</style>
+    <div class="aaa">
+		<img src="${request.contextPath}/statics/js/modules/sys/11.gif" width="120" height="120"  />
+	    <img src="${request.contextPath}/statics/js/modules/sys/22.gif" width="220" height="19"  />
+	    <p id="messige">正在导入</p>
+   </div>
+   
+   
+<div id="deptLayer" style="display: none;padding:10px;">
+	<ul id="deptTree" class="ztree"></ul>
+</div>
+
+<input type="hidden" id="qDeptId">
+<script src="${request.contextPath}/statics/js/comm.js"></script>
+<script src="${request.contextPath}/statics/js/modules/sys/dauser.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/plugins/My97DatePicker/WdatePicker.js"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>储备项目</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/font-awesome.min.css">
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/main.css">
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/login.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  
+  <script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+  
+  	<style>
+  		.glyphicon {
+  			margin-top:10px;
+  		}
+  		
+  		.row {
+  			border-top: none;
+  		}
+  		
+  		.login {
+  			height: 360px;
+  		}
+  	</style>
+  
+	<script>
+  		$(function () {
+			$("#username").focus();
+  			 
+		})
+		
+		
+  	</script>
+</head>
+<body class="hold-transition ">
+	<div class="login_box " id="rrapp" v-cloak>
+			<div style="height:150px; font: 50px '微软雅黑'; color:white;  margin-left:-100px">储备项目</div>
+		  <div class="login_l_img"><img src="${request.contextPath}/statics/img/login-img.3.png" /></div>
+		  <div class="login">
+		      <div class="login_logo"><a href="#"><img src="${request.contextPath}/statics/img/login_logo.png" /></a></div>
+		      
+		      
+		      <div class="login-box-body">
+		      <p class="login-box-msg">系统登录</p>
+		      <div id="divMsg" v-if="error" class="alert alert-danger alert-dismissible">
+		        	<h4 style="margin-bottom: 0px;"><i class="fa fa-exclamation-triangle"></i> {{errorMsg}}</h4>
+		      </div>
+		      <div class="form-group has-feedback">
+		        	<input id="username" type="text" class="form-control" v-model="username" @keyup.enter="inputpass" placeholder="账号">
+		        	<span class="glyphicon glyphicon-user form-control-feedback"></span>
+		      </div>
+		      <div class="form-group has-feedback">
+		        	<input id="password" type="password" class="form-control" v-model="password" @keyup.enter="login" placeholder="密码">
+		        	<span class="glyphicon glyphicon-lock form-control-feedback"></span>
+		      </div>
+		      
+		      
+		      <!--  
+		      <div class="form-group has-feedback">
+		        	<input type="text" class="form-control" v-model="captcha" @keyup.enter="login" placeholder="验证码">
+		        	<span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+		      </div>
+		      <div class="form-group has-feedback">
+		        	<img alt="如果看不清楚，请单击图片刷新！" class="pointer" :src="src" @click="refreshCode">
+		        	&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" @click="refreshCode">点击刷新</a>  	
+		      </div>
+		      
+		      -->
+		      
+		      <div class="row">
+			        <div class="col-xs-8">
+			          	<div class="checkbox icheck">
+			          	</div>
+			        </div>
+			        
+			        <div class="col-xs-4">
+			          	<button type="button" class="btn btn-primary btn-block btn-flat" @click="login">登录</button>
+			        </div>
+		      </div>
+		  </div>
+		  
+		
+		           
+		      
+		  </div>
+		  <!--div class="copyright">XXX有限公司 版权所有?2016-2018 技术支持电话：000-00000000</div-->
+	</div>
+	<div class="login-box" id="rrapp" v-cloak>
+		  
+	</div>
+ 
+<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+<script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
+<script src="${request.contextPath}/statics/libs/jquery.slimscroll.min.js"></script>
+<script src="${request.contextPath}/statics/libs/fastclick.min.js"></script>
+<script src="${request.contextPath}/statics/libs/app.js"></script>
+<script type="text/javascript">
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		username: 'admin',
+		password: 'admin',
+		captcha: '',
+		error: false,
+		errorMsg: '',
+		src: 'captcha.jpg'
+	},
+	beforeCreate: function(){
+		if(self != top){
+			top.location.href = self.location.href;
+		}
+	},
+	methods: {
+		refreshCode: function(){
+			this.src = "captcha.jpg?t=" + $.now();
+		},
+		login: function (event) {
+			var data = "username="+vm.username+"&password="+vm.password+"&captcha="+vm.captcha;
+			$.ajax({
+				type: "POST",
+			    url: "sys/login",
+			    data: data,
+			    dataType: "json",
+			    success: function(result){
+					if(result.code == 0){//登录成功
+						parent.location.href ='index.html';
+					}else if (result.code == 1000) {
+						 
+					 
+						vm.error = true;
+						vm.errorMsg = result.msg;
+						
+						vm.refreshCode();
+
+						
+					}else{
+						
+					 
+						
+						
+						vm.error = true;
+						vm.errorMsg = result.msg;
+						
+						vm.refreshCode();
+					}
+				}
+			});
+		},
+		test: function (event) {
+			var data2 = "username=015765&password=123";
+			$.ajax({ 
+				type: "POST",
+			    url: "http://127.0.0.1:8080/jywh/sys/dauser/login",
+			    data: data2,
+			    dataType: "json",
+			    success: function(result){
+						console.log(result);
+				}
+			});
+			
+		},
+		inputpass:function(){
+			$("#password").focus();
+		}
+	}
+});
+</script>
+</body>
+</html>

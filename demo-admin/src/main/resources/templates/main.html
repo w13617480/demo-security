@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢迎页</title>
+    
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css"-->
+    <#include "header.html">
+    <style>
+		.table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
+			border-bottom-width:0px;
+		}
+		
+		table thead tr {
+			background-color:#eee;
+		}
+	</style>
+</head>
+
+
+<!-- 
+<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+<script src="${request.contextPath}/statics/libs/router.js"></script>
+<script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
+<script src="${request.contextPath}/statics/libs/app.js"></script>
+<script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
+<script src="${request.contextPath}/statics/js/index.js"></script>
+<script src="${request.contextPath}/statics/js/commms.js"></script>
+-->
+<script type="text/javascript">
+	
+	var ds='${request.contextPath}/';
+	
+	function getjczyj(){
+		$.ajax({
+			type: "POST",
+			async:true,
+		    url: ds + "sys/tzborrow/getjczyj",
+	        contentType: "application/json",
+		    success: function(r){
+				if(r.code == 0){				 	
+					$("#jqGridJczyj").setGridParam({data: r.dicts, rowNum: r.dicts.length}).trigger('reloadGrid');  
+				}else{
+					alert(r.msg);
+				}
+			}
+		});
+	}
+	
+	function getzjqyj(){
+		$.ajax({
+			type: "POST",
+			async:true,
+		    url: ds + "sys/tzborrow/getzjqyj",
+	        contentType: "application/json",
+		    success: function(r){
+				if(r.code == 0){
+					if (r.dicts.length > 0 ){
+						$("#jqGridZjqyj").setGridParam({data: r.dicts, rowNum: r.dicts.length}).trigger('reloadGrid'); 
+						$("#zjqyj").show();
+						 
+					} else {
+						$("#zjqyj").hide();
+					 
+					}
+					
+				}else{
+					alert(r.msg);
+				}
+			}
+		});
+	}
+	
+	function iniGridForJczyj(){
+		$("#jqGridJczyj").jqGrid({
+			url: '#',
+	        datatype: "local",
+	        data:[],
+	        colModel: [	
+				{ label: 'jczid', name: 'jczid', index: 'jczid', width: 50, key: true,hidden:true },
+   				{ label: '检查站', name: 'jczname', index: 'jczname', width: 150, align:'center' }, 			
+   				{ label: '上限', name: 'max', index: 'max', width: 130, align:'center' }, 
+   				{ label: '下限', name: 'min', index: 'min', width: 130, align:'center'  }, 	
+   				{ label: '当前数量', name: 'dqzjqsl', index: 'dqzjqsl', width: 90, align:'center' }, 			
+   				{ label: '说明', name: 'qk', index: 'qk', width: 110, align:'center' ,formatter: function(qk){
+   		    		
+   						return qk == '正常' ? qk : '<span class="label label-danger">' + qk + '</span>'; 
+   					}
+   				}
+   	   	    ],
+			viewrecords: true,
+	        height: 'auto',
+	        rowNum: 10,
+			rowList : [10,30,50],
+	        rownumbers: true, 
+	        rownumWidth: 25, 
+	        autowidth:true,
+	       
+	        multiselect: false,
+	        pager: "#jqGridPager",
+	        jsonReader : {
+	            root: "page.list",
+	            page: "page.currPage",
+	            total: "page.totalPage",
+	            records: "page.totalCount"
+	        },
+	        prmNames : {
+	            page:"page", 
+	            rows:"limit", 
+	            order: "order"
+	        },
+	        gridComplete:function(){
+	        	//隐藏grid底部滚动条
+	        	$("#jqGridJczyj").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+	       		//自适应
+	        	//$("#jqGridJczyj").setGridWidth($(window).width());
+	        }
+	    });
+	}
+ 
+	
+	function iniGridForZjqyj(){
+		$("#jqGridZjqyj").jqGrid({
+			url: '#',
+	        datatype: "local",
+	        data:[],
+	        colModel: [			
+				{ label: 'zjqid', name: 'zjqid', index: 'zjqid', width: 50, key: true,hidden:true },
+				{ label: '设备编码', name: 'zjqbm', index: 'zjqbm', width: 120, align:'center' }, 
+				{ label: '设备名称', name: 'zjqname', index: 'zjqname', width: 120, align:'center' }, 
+				{ label: '设备状态', name: 'sbzt', index: 'sbzt', width: 100, align:'center' }, 
+				{ label: '到期日期', name: 'dqsj', index: 'dqsj', width: 100, align:'center' }, 
+				{ label: '剩余天数', name: 'sysyts', index: 'sysyts', width: 100, align:'right' }, 
+				{ label: '当前位置', name: 'currcheckpointname', index: 'currcheckpointname', width: 100, align:'center' } 			
+	        ],
+			viewrecords: true,
+	        height: 'auto',
+	        rowNum: 10,
+			rowList : [10,30,50],
+	        rownumbers: true, 
+	        rownumWidth: 25, 
+	        autowidth:true,
+	       
+	        multiselect: false,
+	        pager: "#jqGridPager",
+	        jsonReader : {
+	            root: "page.list",
+	            page: "page.currPage",
+	            total: "page.totalPage",
+	            records: "page.totalCount"
+	        },
+	        prmNames : {
+	            page:"page", 
+	            rows:"limit", 
+	            order: "order"
+	        },
+	        gridComplete:function(){
+	        	//隐藏grid底部滚动条
+	        	$("#jqGridZjqyj").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+	       		//自适应
+	        	//$("#jqGridZjqyj").setGridWidth($(window).width());
+	        }
+	    });
+	}
+	
+	function read(){
+		
+	 
+		iniGridForJczyj();
+		//iniGridForZjqyj();
+		
+		//getjczyj();
+		//getzjqyj();
+	}
+</script>
+
+<body onload="read()">
+
+	<div class="panel panel-default" style="display:none">
+		<div class="panel-heading"><label>预警信息</label></div>
+	    
+		<div id = "jczyj">
+			
+			<h3>&nbsp;&nbsp;&nbsp;检查站预警</h3>
+
+	        <div  style="padding:20px 20px; margin-left:60px; margin-right:60px ">
+				<table id="jqGridJczyj"></table>
+			</div>
+		</div>
+
+		<div id = "zjqyj" style="display:none">
+			
+	        <h3>&nbsp;&nbsp;&nbsp;自救器预警</h3>
+
+	     	<div  style="padding:20px 20px; margin-left:60px; margin-right:60px ">
+		     	<table id="jqGridZjqyj"></table>
+		    </div>
+	    </div>
+	</div>
+</body>
+</html>

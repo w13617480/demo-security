@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<system.web>
+    <!--提供Web服务访问方式-->
+    <webServices>
+      <protocols>
+        <add name="HttpSoap"/>
+        <add name="HttpPost"/>
+        <add name="HttpGet"/>
+        <add name="Documentation"/>
+      </protocols>
+    </webServices>
+    
+    
+     <configuration>
+		 <system.webServer>  
+		    <httpProtocol>   
+		    <customHeaders>   
+		      <add name="Access-Control-Allow-Methods" value="OPTIONS,POST,GET"/>   
+		      <add name="Access-Control-Allow-Headers" value="x-requested-with,content-type"/>   
+		      <add name="Access-Control-Allow-Origin" value="*" />   
+		    </customHeaders>   
+		  </httpProtocol>   
+		  <modules>  
+		    <add name="MyHttpModule" type="WebServiceDemo.MyHttpModule"/>  
+		  </modules>
+		  </system.webServer>  
+	</configuration>
+
+ </system.web>
+ 
+ 
