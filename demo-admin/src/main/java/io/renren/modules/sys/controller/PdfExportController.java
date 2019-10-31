@@ -37,6 +37,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import io.renren.common.utils.R;
 import io.renren.modules.sys.entity.*;
+import oracle.net.aso.e;
+
+import java.util.zip.ZipOutputStream;
+import org.apache.commons.io.IOUtils;
+import java.util.zip.ZipEntry;
 
 /**
  * pdf导出
@@ -169,6 +174,16 @@ public class PdfExportController implements Serializable{
 			//文件名入数据库  
 			this.saveDataBase(filename);
 			flag = true;
+			
+			
+			List<String> x = new ArrayList<String>();
+			x.add(sourcePath+filename+".pdf");
+			x.add(sourcePath+"1.pdf");
+			try{
+				reZipCsvFiles(sourcePath+filename+".zip", x);
+			} catch ( Exception iex) {
+				iex.printStackTrace();
+			}
 		} catch (IOException e) {
 			System.err.println("=================保存文件失败IOException"+e.getMessage()+"==================");
 			e.printStackTrace();
@@ -203,4 +218,34 @@ public class PdfExportController implements Serializable{
 
 		return heTong;
 	}
+	
+	
+	private void reZipCsvFiles(String targetZipRealPath, List<String> targetFilePathList) throws Exception {
+        File targetZipFile = new File(targetZipRealPath);
+        InputStream in = null;
+        FileOutputStream fos = null;
+        ZipOutputStream zipOutputStream = null;
+        try {
+            fos = new FileOutputStream(targetZipFile);
+            zipOutputStream = new ZipOutputStream(fos);
+            for (String csvFilePath: targetFilePathList) {
+                in = new FileInputStream(csvFilePath);
+                String csvFileName = csvFilePath.substring(csvFilePath.lastIndexOf(File.separator) + 1);
+                zipOutputStream.putNextEntry(new ZipEntry(csvFileName));
+                IOUtils.copy(in, zipOutputStream);
+                zipOutputStream.closeEntry();
+				in.close();
+			}
+        } finally {
+            if (zipOutputStream != null) {
+                zipOutputStream.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
+            if (in != null) {
+                in.close();
+            }
+        }
+    }
 }

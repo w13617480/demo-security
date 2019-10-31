@@ -1,4 +1,6 @@
 target/
+logs/
+hetong/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
